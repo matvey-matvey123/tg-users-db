@@ -83,6 +83,9 @@ async def load_db(path):
 
 
 def merge_users(existing, contacts):
+    """Добавляет новые записи и обновляет авто-поля существующих (имя/юзернейм/био/телефон),
+    сохраняя ручные правки (заметки, теги, историю).
+    """
     by_id = {}
     by_phone = {}
     for u in existing:
@@ -91,19 +94,28 @@ def merge_users(existing, contacts):
         if u.get("phone"):
             by_phone[u["phone"].replace("+", "").replace(" ", "")] = u
 
-    added = 0
+    AUTO = ("username", "name", "bio", "phone")
+    added = updated = 0
+
     for c in contacts:
         cid = c.get("id")
         phone_key = (c.get("phone") or "").replace("+", "").replace(" ", "")
-        if (cid is not None and cid in by_id) or (phone_key and phone_key in by_phone):
+        if cid is not None and cid in by_id:
+            tgt = by_id[cid]
+            for k in AUTO:
+                if k in c and tgt.get(k) != c[k]:
+                    tgt[k] = c[k]
+                    updated += 1
+        elif phone_key and phone_key in by_phone:
             continue
-        if cid is not None:
-            by_id[cid] = c
-        if phone_key:
-            by_phone[phone_key] = c
-        existing.append(c)
-        added += 1
-    return existing, added
+        else:
+            if cid is not None:
+                by_id[cid] = c
+            if phone_key:
+                by_phone[phone_key] = c
+            existing.append(c)
+            added += 1
+    return existing, added, updated
 
 
 async def collect_contacts(client, tags, with_phone, with_bio, include_chats, limit):
@@ -229,12 +241,12 @@ async def run(args):
             args.include_chats, args.limit,
         )
 
-    merged, added = merge_users(existing, contacts)
+    merged, added, updated = merge_users(existing, contacts)
     out = Path(args.output)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps({"users": merged}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-    print(f"Готово: новых записей {added}, всего в базе {len(merged)} -> {out}")
+    print(f"Готово: новых {added}, обновлено полей {updated}, всего в базе {len(merged)} -> {out}")
     await client.disconnect()
 
 
