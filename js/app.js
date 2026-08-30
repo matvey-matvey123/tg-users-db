@@ -17,23 +17,16 @@ function normalize(v) {
 function matches(user, query) {
   const q = normalize(query);
   if (!q) return false;
-  if (String(user.id).toLowerCase() === q) return true;
-  if (normalize(user.username) === q) return true;
-  if (user.usernames.some((u) => normalize(u.value) === q)) return true;
-  if (user.names.some((n) => normalize(n.value).includes(q))) return true;
-  if (normalize(user.username).includes(q)) return true;
-  if (normalize(user.name).includes(q)) return true;
+  const username = normalize(user.username);
+  const name = normalize(user.name);
+  if (user.id != null && String(user.id) === q) return true;
+  if (username === q) return true;
+  if (user.usernames && user.usernames.some((u) => normalize(u.value) === q)) return true;
+  if (user.names && user.names.some((n) => normalize(n.value).includes(q))) return true;
+  if (username.includes(q)) return true;
+  if (name.includes(q)) return true;
+  if (user.phone && normalize(user.phone).includes(q)) return true;
   return false;
-}
-
-function renderHistory(rows, current) {
-  if (!rows || rows.length === 0) return "";
-  let body = "";
-  for (const r of rows) {
-    const isCurrent = current && normalize(r.value) === normalize(current);
-    body += `<tr><td class="value">${escapeHtml(r.value)}${isCurrent ? ' <span class="badge">сейчас</span>' : ""}</td><td class="period">${escapeHtml(r.period || "")}</td></tr>`;
-  }
-  return `<div class="history-block"><h4>${body.includes("сейчас") ? "Юзернеймы" : ""}</h4></div>`.replace("<h4></h4>", "");
 }
 
 function renderHistoryBlock(title, rows, current) {
