@@ -1,0 +1,42 @@
+{
+  "users": [
+    {
+      "id": 123456789,
+      "username": "sasha_iv",
+      "name": "Саша Иванов",
+      "first_seen": "2021-03-14",
+      "last_seen": "2026-08-01",
+      "usernames": [
+        { "value": "sasha_2001", "period": "2021-03 - 2022-01" },
+        { "value": "sasha_iv", "period": "2022-01 - н.в." }
+      ],
+      "names": [
+        { "value": "Sasha", "period": "2021-03 - 2023-06" },
+        { "value": "Саша Иванов", "period": "2023-06 - н.в." }
+      ],
+      "bio": "Разработчик из Москвы",
+      "phone": "+7 999 123-45-67",
+      "links": ["https://t.me/sasha_iv"],
+      "tags": ["dev", "moskva"],
+      "notes": "Первый раз замечен в чате @python_ru"
+    },
+    {
+      "id": 987654321,
+      "username": "masha_kat",
+      "name": "Мария К.",
+      "first_seen": "2022-12-05",
+      "last_seen": "2026-07-20",
+      "usernames": [
+        { "value": "mash_k", "period": "2022-12 - 2024-02" },
+        { "value": "masha_kat", "period": "2024-02 - н.в." }
+      ],
+      "names": [
+        { "value": "Masha", "period": "2022-12 - 2025-01" },
+        { "value": "Мария К.", "period": "2025-01 - н.в." }
+      ],
+      "bio": "Дизайнер · @masha_kat",
+      "tags": ["design", "spb"],
+      "notes": "Использовала бота @image_search, активна в @design_chat"
+    }
+  ]
+}

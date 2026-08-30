@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TG Users DB — база данных пользователей Telegram</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>TG Users DB</h1>
+    <p class="subtitle">Поиск по базе: история юзернеймов, имён и другая известная информация о пользователях Telegram.</p>
+  </header>
+
+  <main>
+    <section class="search-box">
+      <input type="text" id="search-input" placeholder="Юзернейм (с @ или без), user ID или часть имени…" autocomplete="off">
+      <button id="search-button">Найти</button>
+    </section>
+
+    <p id="status" class="status"></p>
+    <section id="results"></section>
+  </main>
+
+  <footer>
+    <p>Данные добавляются вручную. <a href="admin.html">Добавить запись</a> · <a href="https://github.com/matvey-matvey123/tg-users-db">Исходники</a></p>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

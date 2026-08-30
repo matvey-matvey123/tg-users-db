@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Добавить запись — TG Users DB</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Добавить запись</h1>
+    <p class="subtitle">Форма генерирует JSON-блок для вставки в <code>data/users.json</code> на GitHub.</p>
+  </header>
+
+  <main class="admin">
+    <form id="add-form">
+      <div class="grid">
+        <label>User ID (число)
+          <input type="number" id="f-id" placeholder="123456789" required>
+        </label>
+        <label>Текущий юзернейм
+          <input type="text" id="f-username" placeholder="ivanov" required>
+        </label>
+        <label>Текущее имя
+          <input type="text" id="f-name" placeholder="Иван">
+        </label>
+        <label>Первый раз замечен
+          <input type="date" id="f-first_seen">
+        </label>
+        <label>Последний раз замечен
+          <input type="date" id="f-last_seen">
+        </label>
+        <label>Био
+          <input type="text" id="f-bio" placeholder="Био из профиля">
+        </label>
+        <label>Телефон
+          <input type="text" id="f-phone" placeholder="+7 999 000-00-00">
+        </label>
+        <label>Теги (через запятую)
+          <input type="text" id="f-tags" placeholder="dev, moskva">
+        </label>
+      </div>
+
+      <label>История юзернеймов (одна строка = один период: <code>значение | период</code>)
+        <textarea id="f-usernames" rows="3" placeholder="ivan2000 | 2020-01 - 2022-05&#10;ivanov | 2022-05 - н.в."></textarea>
+      </label>
+
+      <label>История имён (формат выше)
+        <textarea id="f-names" rows="3" placeholder="Ivan | 2020-01 - 2021-03&#10;Иван Петров | 2021-03 - н.в."></textarea>
+      </label>
+
+      <label>Ссылки (по одной в строке)
+        <textarea id="f-links" rows="2" placeholder="https://t.me/ivanov"></textarea>
+      </label>
+
+      <label>Заметки
+        <textarea id="f-notes" rows="3" placeholder="Где и когда замечен, доп. информация…"></textarea>
+      </label>
+
+      <button type="submit">Сгенерировать JSON</button>
+    </form>
+
+    <pre id="output" class="output hidden"></pre>
+    <button id="copy-button" class="hidden">Скопировать JSON</button>
+  </main>
+
+  <footer>
+    <p><a href="index.html">← На главную</a></p>
+  </footer>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
