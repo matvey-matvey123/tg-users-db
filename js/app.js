@@ -3,6 +3,7 @@
 const DATA_URL = "data/users.json";
 
 let database = [];
+let lastResults = [];
 
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (c) => ({
@@ -62,12 +63,11 @@ function avatarUrl(username) {
 function userCard(user) {
   const avatar = avatarUrl(user.username);
   const img = avatar
-    ? `<img src="${avatar}" width="48" height="48" alt="avatar" onerror="this.style.display='none'" style="border-radius:50%;">`
+    ? `<img src="${avatar}" width="56" height="56" alt="avatar" onerror="this.style.display='none'" style="border-radius:50%;">`
     : "";
-  return `<article class="user-card">
-    <h2>${img} ${escapeHtml(user.name || user.username || "Без имени")} <span class="badge">@${escapeHtml(user.username || "—")}</span></h2>
+  return `<h2>${img} ${escapeHtml(user.name || "Без имени")} <span class="badge">@${escapeHtml(user.username || "—")}</span></h2>
     <div class="meta">
-      ${user.id ? `<span>ID: <a href="https://t.me/id/${escapeHtml(user.id)}">${escapeHtml(user.id)}</a></span>` : ""}
+      ${user.id != null ? `<span>ID: <a href="https://t.me/id/${escapeHtml(user.id)}">${escapeHtml(user.id)}</a></span>` : ""}
       <span>Первый раз замечен: ${escapeHtml(user.first_seen || "—")}</span>
       <span>Последний раз: ${escapeHtml(user.last_seen || "—")}</span>
     </div>
@@ -77,22 +77,45 @@ function userCard(user) {
     ${infoRow("Био", user.bio)}
     ${infoRow("Телефон", user.phone)}
     ${linksHtml(user.links)}
-    ${infoRow("Заметки", user.notes)}
-  </article>`;
+    ${infoRow("Заметки", user.notes)}`;
+}
+
+function listRow(user, i) {
+  return `<div class="user-row" onclick="showUser(${i})">
+    <div class="row-name">${escapeHtml(user.name || user.username || "Без имени")}</div>
+    <div class="row-username">${user.username ? "@" + escapeHtml(user.username) : ""}</div>
+    <div class="row-meta">${user.id != null ? "ID: " + escapeHtml(user.id) : ""}</div>
+    ${(user.tags && user.tags.length) ? `<div class="row-tags">${user.tags.map((t) => `<field>${escapeHtml(t)}</field>`).join("")}</div>` : ""}
+  </div>`;
+}
+
+function showUser(i) {
+  const user = lastResults[i];
+  if (!user) return;
+  const card = document.getElementById("modal-card");
+  card.innerHTML = userCard(user);
+  document.getElementById("modal").classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+
+function closeModal() {
+  document.getElementById("modal").classList.add("hidden");
+  document.body.style.overflow = "";
 }
 
 function showResults(users, query) {
+  lastResults = users;
   const container = document.getElementById("results");
   const status = document.getElementById("status");
 
   if (users.length === 0) {
-    status.textContent = `По запросу «${query}» ничего не найдено. Попробуйте другой юзернейм или ID, или добавьте запись.`;
+    status.textContent = `По запросу «${query}» ничего не найдено. Попробуйте другой юзернейм или ID.`;
     container.innerHTML = "";
     return;
   }
 
   status.textContent = `Найдено: ${users.length}`;
-  container.innerHTML = users.map(userCard).join("");
+  container.innerHTML = users.map(listRow).join("");
 }
 
 async function loadDatabase() {
@@ -104,7 +127,7 @@ async function loadDatabase() {
 
 function runSearch(query) {
   if (!query.trim()) {
-    document.getElementById("status").textContent = "Введите юзернейм или ID.";
+    document.getElementById("status").textContent = "Введите юзернейм, имя или ID.";
     document.getElementById("results").innerHTML = "";
     return;
   }
@@ -127,4 +150,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   button.addEventListener("click", () => runSearch(input.value));
   input.addEventListener("keydown", (e) => { if (e.key === "Enter") runSearch(input.value); });
   input.addEventListener("input", () => { if (input.value.trim()) runSearch(input.value); });
+
+  document.getElementById("modal").addEventListener("click", (e) => {
+    if (e.target.id === "modal") closeModal();
+  });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 });
