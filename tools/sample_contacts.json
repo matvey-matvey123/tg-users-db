@@ -1,0 +1,38 @@
+{
+  "users": [
+    {
+      "id": 100000001,
+      "first_name": "Иван",
+      "last_name": "Петров",
+      "username": "ivan_petrov",
+      "phone": "+7 999 123 45 67",
+      "bio": "Разработчик из Москвы",
+      "date": "2021-03-14T10:30:00"
+    },
+    {
+      "id": 100000002,
+      "first_name": "Мария",
+      "last_name": "Кузнецова",
+      "username": "",
+      "phone": "+7 999 000 11 22",
+      "date": "2022-12-05T09:00:00"
+    },
+    {
+      "id": 100000003,
+      "first_name": "Oleg",
+      "username": "oleg_design",
+      "phone": ""
+    },
+    {
+      "id": -1001234567890,
+      "first_name": "Моя группа",
+      "username": "group_url",
+      "phone": ""
+    },
+    {
+      "id": 100000004,
+      "first_name": "Deleted Account",
+      "phone": ""
+    }
+  ]
+}

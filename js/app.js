@@ -74,7 +74,7 @@ function userCard(user) {
   return `<article class="user-card">
     <h2>${img} ${escapeHtml(user.name || user.username || "Без имени")} <span class="badge">@${escapeHtml(user.username || "—")}</span></h2>
     <div class="meta">
-      <span>ID: <a href="https://t.me/id/${escapeHtml(user.id)}">${escapeHtml(user.id)}</a></span>
+      ${user.id ? `<span>ID: <a href="https://t.me/id/${escapeHtml(user.id)}">${escapeHtml(user.id)}</a></span>` : ""}
       <span>Первый раз замечен: ${escapeHtml(user.first_seen || "—")}</span>
       <span>Последний раз: ${escapeHtml(user.last_seen || "—")}</span>
     </div>

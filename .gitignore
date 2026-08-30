@@ -1,0 +1,3 @@
+tools/tg.session
+__pycache__/
+*.session
