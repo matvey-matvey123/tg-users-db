@@ -220,7 +220,7 @@ async def run(args):
 
     tags = list(args.tag) + (["контакт"] if not args.search else [])
 
-    existing = await load_db(Path(args.output))
+    existing = [] if args.overwrite else await load_db(Path(args.output))
     if args.search:
         contacts = await collect_search(client, args.search, tags, args.with_phone, not args.no_bio)
     else:
@@ -251,6 +251,8 @@ def main():
     ap.add_argument("--proxy-secret", default=None, help="секрет прокси (ee... для fake-TLS)")
     ap.add_argument("--session", default="tools/tg.session", help="файл сессии")
     ap.add_argument("--output", default="data/users.json", help="куда писать базу")
+    ap.add_argument("--overwrite", action="store_true",
+                    help="перезаписать базу целиком вместо добавления к существующим записям")
     ap.add_argument("--include-chats", action="store_true",
                     help="также брать людей из личных диалогов (не только сохранённые контакты)")
     ap.add_argument("--with-phone", action="store_true",
