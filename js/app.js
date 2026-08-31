@@ -71,7 +71,6 @@ function userCard(user) {
       <span>Первый раз замечен: ${escapeHtml(user.first_seen || "—")}</span>
       <span>Последний раз: ${escapeHtml(user.last_seen || "—")}</span>
     </div>
-    ${user.saved_as ? infoRow("Как записано у тебя", user.saved_as) : ""}
     ${renderHistoryBlock("История юзернеймов", user.usernames, user.username)}
     ${renderHistoryBlock("История имён", user.names, user.name)}
     ${tagsHtml(user.tags)}

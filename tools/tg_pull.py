@@ -8,7 +8,7 @@
   python tools/tg_pull.py --api-id 12345678 --api-hash aaa...bbb          # контакты (био)
   python tools/tg_pull.py --api-id 123 --api-hash xxx --no-bio           # без био (быстрее)
   python tools/tg_pull.py --api-id 123 --api-hash xxx --include-chats    # ещё и диалоги людей
-  python tools/tg_pull.py --api-id 123 --api-hash xxx --with-phone       # включить телефоны (публично!)
+  python tools/tg_pull.py --api-id 123 --api-hash xxx --no-phone        # без телефонов
   python tools/tg_pull.py --api-id 123 --api-hash xxx --search @user1 username2  # поиск людей
 
 Параметры можно задать переменными окружения: TG_API_ID, TG_API_HASH, TG_PHONE.
@@ -103,6 +103,8 @@ def merge_users(existing, contacts):
         if cid is not None and cid in by_id:
             tgt = by_id[cid]
             for k in AUTO:
+                if k == "name" and tgt.get("saved_as"):
+                    continue
                 if k in c and tgt.get(k) != c[k]:
                     tgt[k] = c[k]
                     updated += 1
@@ -231,13 +233,14 @@ async def run(args):
     print(f"Вошли как {me.first_name} (@{me.username}, id {me.id})")
 
     tags = list(args.tag) + (["контакт"] if not args.search else [])
+    with_phone = not args.no_phone
 
     existing = [] if args.overwrite else await load_db(Path(args.output))
     if args.search:
-        contacts = await collect_search(client, args.search, tags, args.with_phone, not args.no_bio)
+        contacts = await collect_search(client, args.search, tags, with_phone, not args.no_bio)
     else:
         contacts = await collect_contacts(
-            client, tags, args.with_phone, not args.no_bio,
+            client, tags, with_phone, not args.no_bio,
             args.include_chats, args.limit,
         )
 
@@ -267,8 +270,8 @@ def main():
                     help="перезаписать базу целиком вместо добавления к существующим записям")
     ap.add_argument("--include-chats", action="store_true",
                     help="также брать людей из личных диалогов (не только сохранённые контакты)")
-    ap.add_argument("--with-phone", action="store_true",
-                    help="включать телефоны в базу (внимание: сайт публичный)")
+    ap.add_argument("--no-phone", action="store_true",
+                    help="НЕ включать телефоны в базу (по умолчанию телефоны берутся)")
     ap.add_argument("--no-bio", action="store_true", help="не тянуть био (быстрее, меньше запросов)")
     ap.add_argument("--tag", action="append", default=[],
                     help="добавить тег (можно несколько раз), по умолчанию 'контакт'")
