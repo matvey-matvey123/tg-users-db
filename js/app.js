@@ -37,22 +37,11 @@ function renderHistoryBlock(title, rows, current) {
     const isCurrent = current && normalize(r.value) === normalize(current);
     body += `<tr><td class="value">${escapeHtml(r.value)}${isCurrent ? ' <span class="badge">сейчас</span>' : ""}</td><td class="period">${escapeHtml(r.period || "")}</td></tr>`;
   }
-  return `<div class="history-block"><h4>${escapeHtml(title)}</h4><table>${body}</table></div>`;
+  return `<details class="history-block"><summary>${escapeHtml(title)}</summary><table>${body}</table></details>`;
 }
 
-function tagsHtml(tags) {
-  if (!tags || tags.length === 0) return "";
-  return `<div>${tags.map((t) => `<field>${escapeHtml(t)}</field>`).join("")}</div>`;
-}
-
-function linksHtml(links) {
-  if (!links || links.length === 0) return "";
-  return `<div class="info-row"><span class="k">Ссылки</span><span class="v">${links.map((l) => `<a href="${escapeHtml(l)}" target="_blank" rel="noopener">${escapeHtml(l)}</a>`).join("<br>")}</span></div>`;
-}
-
-function infoRow(k, v) {
-  if (!v) return "";
-  return `<div class="info-row"><span class="k">${escapeHtml(k)}</span><span class="v">${escapeHtml(v)}</span></div>`;
+function row(k, vHtml) {
+  return `<div class="info-row"><span class="k">${escapeHtml(k)}</span><span class="v">${vHtml || "—"}</span></div>`;
 }
 
 function avatarUrl(username) {
@@ -65,19 +54,22 @@ function userCard(user) {
   const img = avatar
     ? `<img src="${avatar}" width="56" height="56" alt="avatar" onerror="this.style.display='none'" style="border-radius:50%;">`
     : "";
-  return `<h2>${img} ${escapeHtml(user.name || "Без имени")} <span class="badge">@${escapeHtml(user.username || "—")}</span></h2>
-    <div class="meta">
-      ${user.id != null ? `<span>ID: <a href="https://t.me/id/${escapeHtml(user.id)}">${escapeHtml(user.id)}</a></span>` : ""}
-      <span>Первый раз замечен: ${escapeHtml(user.first_seen || "—")}</span>
-      <span>Последний раз: ${escapeHtml(user.last_seen || "—")}</span>
-    </div>
+  const tags = (user.tags && user.tags.length) ? user.tags.map((t) => escapeHtml(t)).join(", ") : "";
+  const links = (user.links && user.links.length)
+    ? user.links.map((l) => `<a href="${escapeHtml(l)}" target="_blank" rel="noopener">${escapeHtml(l)}</a>`).join(", ")
+    : "";
+  const idHtml = user.id != null ? `<a href="https://t.me/id/${escapeHtml(user.id)}">${escapeHtml(user.id)}</a>` : "";
+  return `<h2>${img} ${escapeHtml(user.name || "—")} <span class="badge">@${escapeHtml(user.username || "—")}</span></h2>
+    ${row("ID", idHtml)}
+    ${row("Первый раз замечен", escapeHtml(user.first_seen || ""))}
+    ${row("Последний раз", escapeHtml(user.last_seen || ""))}
+    ${row("Телефон", escapeHtml(user.phone || ""))}
+    ${row("Био", escapeHtml(user.bio || ""))}
+    ${row("Теги", escapeHtml(tags))}
+    ${row("Ссылки", links)}
+    ${row("Заметки", escapeHtml(user.notes || ""))}
     ${renderHistoryBlock("История юзернеймов", user.usernames, user.username)}
-    ${renderHistoryBlock("История имён", user.names, user.name)}
-    ${tagsHtml(user.tags)}
-    ${infoRow("Био", user.bio)}
-    ${infoRow("Телефон", user.phone)}
-    ${linksHtml(user.links)}
-    ${infoRow("Заметки", user.notes)}`;
+    ${renderHistoryBlock("История имён", user.names, user.name)}`;
 }
 
 function listRow(user, i) {
