@@ -592,11 +592,16 @@
       "id": 7804146812,
       "username": "chat_jbpt",
       "name": "ЧАТ ДЖБТ",
+      "first_seen": "2025-01-20",
+      "last_seen": "2026-09-01",
       "tags": [
         "контакт"
       ],
       "saved_as": "Матвей",
       "phone": "+79937574003",
+      "links": [
+        "https://t.me/chat_jbpt"
+      ],
       "names": [
         {
           "value": "ЧАТ ДЖБТ",
