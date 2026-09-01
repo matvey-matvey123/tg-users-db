@@ -59,7 +59,8 @@ function userCard(user) {
     ? user.links.map((l) => `<a href="${escapeHtml(l)}" target="_blank" rel="noopener">${escapeHtml(l)}</a>`).join(", ")
     : "";
   const idHtml = user.id != null ? `<a href="https://t.me/id/${escapeHtml(user.id)}">${escapeHtml(user.id)}</a>` : "";
-  return `<h2>${img} ${escapeHtml(user.name || "—")} <span class="badge">@${escapeHtml(user.username || "—")}</span></h2>
+  return `<button class="close-btn" onclick="closeModal()" aria-label="Закрыть">&times;</button>
+    <h2>${img} ${escapeHtml(user.name || "—")} <span class="badge">@${escapeHtml(user.username || "—")}</span></h2>
     ${row("ID", idHtml)}
     ${row("Первый раз замечен", escapeHtml(user.first_seen || ""))}
     ${row("Последний раз", escapeHtml(user.last_seen || ""))}

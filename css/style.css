@@ -114,11 +114,26 @@ button:hover { filter: brightness(1.1); }
 .meta span { margin-right: 1rem; }
 
 .history-block { margin: 1rem 0; }
-.history-block h4 { margin: 0 0 0.4rem; color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
-.history-block table { width: 100%; border-collapse: collapse; }
+.history-block summary { color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; user-select: none; }
+.history-block summary:hover { color: var(--text); }
+.history-block table { width: 100%; border-collapse: collapse; margin-top: 0.4rem; }
 .history-block td { padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
 .history-block td.value { font-weight: 600; }
 .history-block td.period { color: var(--muted); text-align: right; white-space: nowrap; }
+
+.close-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.2rem;
+}
+.close-btn:hover { color: var(--text); filter: none; }
 
 field {
   display: inline-block;

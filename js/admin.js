@@ -28,8 +28,9 @@ function parseLinks(text) {
 
 function buildJson() {
   const val = (id) => document.getElementById(id).value.trim();
+  const idVal = val("f-id");
   const user = {
-    id: val("f-id"),
+    id: idVal ? parseInt(idVal, 10) || null : null,
     username: val("f-username"),
     name: val("f-name"),
   };

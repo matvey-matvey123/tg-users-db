@@ -2,3 +2,4 @@ tools/tg.session
 tools/second.session
 __pycache__/
 *.session
+tools/_*
